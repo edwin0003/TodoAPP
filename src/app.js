@@ -7,11 +7,18 @@ import { routerLogin } from "./routers/login.js";
 import { routerTodo } from "./routers/todo.js";
 import {PrismaSessionStore} from "@quixo3/prisma-session-store"
 import { PrismaClient } from "@prisma/client";
+import dayjs from "dayjs";
 const app = express();
 // app.set("views", __dirname+ "/views")
 app.set('views', resolve('./views'));
 app.engine('.hbs', engine({
-    extname: '.hbs'
+    extname: '.hbs', 
+    helpers:{
+        dateFormat:
+        function(date, format){
+            return dayjs(date).format(format)
+        }
+    }
 }))
 
 app.set('view engine', 'hbs')
@@ -45,6 +52,14 @@ app.use((req, res, next)=>{
 
 app.get('/', (req, res) => {
     res.render('home')
+    
+})
+
+
+app.get('/todoList/list', (req, res) => {
+    res.render('list', {
+        mydate: new Date()
+    })
     
 })
 
